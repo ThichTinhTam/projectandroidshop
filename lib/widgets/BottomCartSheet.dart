@@ -12,7 +12,6 @@ class BottomCartSheet extends StatelessWidget {
         padding: EdgeInsets.only(top: 20),
         color: Color(0xFFCEDDEE),
         child: Column(
-          
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(

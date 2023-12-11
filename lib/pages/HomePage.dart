@@ -33,10 +33,25 @@ class HomePage extends StatelessWidget {
                           )
                         ],
                       ),
-                      child: Icon(
-                        Icons.sort,
-                        size: 30,
-                        color: Color(0xFF475269),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.sort,
+                            size: 30,
+                            color: Color(0xFF475269),
+                          ),
+                          InkWell(
+                            onTap: () {Navigator.pushNamed(context, "/");},
+                            child: Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: Icon(
+                                Icons.add_box_outlined,
+                                size: 30,
+                                color: Color(0xFF475269),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     Container(

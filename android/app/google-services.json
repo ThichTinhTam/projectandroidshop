@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1091906069994",
+    "project_id": "vietshoe-edee0",
+    "storage_bucket": "vietshoe-edee0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1091906069994:android:570e754e38e560d3e5be93",
+        "android_client_info": {
+          "package_name": "com.example.projectandroid"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZiThFtZZacuX7M5Xu2HT511F4s6Cnnog"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

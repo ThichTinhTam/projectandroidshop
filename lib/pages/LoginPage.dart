@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import 'Signup.dart';
@@ -7,6 +9,8 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController _emailAddressController = TextEditingController();
+    TextEditingController _passwordAddressController = TextEditingController();
     return Scaffold(
       body: SingleChildScrollView(
         child: SafeArea(
@@ -41,6 +45,7 @@ class LoginPage extends StatelessWidget {
                     Container(
                       width: 250,
                       child: TextFormField(
+                        controller: _emailAddressController,
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           hintText: "Enter Username",
@@ -77,6 +82,7 @@ class LoginPage extends StatelessWidget {
                     Container(
                       width: 250,
                       child: TextFormField(
+                        controller: _passwordAddressController,
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           hintText: "Enter Password",
@@ -91,7 +97,8 @@ class LoginPage extends StatelessWidget {
                 margin: EdgeInsets.only(left: 15),
                 alignment: Alignment.centerLeft,
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                  },
                   child: Text(
                     "Forget Password",
                     style: TextStyle(
@@ -105,7 +112,38 @@ class LoginPage extends StatelessWidget {
               SizedBox(height: 40),
               InkWell(
                 onTap: () {
-                  Navigator.pushNamed(context, "homePage");
+                  String email = _emailAddressController.text.trim();
+                  String pass = _passwordAddressController.text.trim();
+                  if (email.isEmpty || pass.isEmpty) {
+                    final snackBar = SnackBar(
+                      content: Text('Bạn chưa nhập đầy đủ thông tin'),
+                      backgroundColor: Colors.black12,
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  }
+                  // if (email == _emailAddressController  && pass == _passwordAddressController) {
+                  //   final snackBar = SnackBar(
+                  //     content: Text('Đăng nhập thành công'),
+                  //     backgroundColor: Colors.black12,
+                  //   );
+                  //   ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  // }
+                  //   if {
+                  //     final snackBar = SnackBar(
+                  //       content: Text('Đăng nhập không thành công'),
+                  //       backgroundColor: Colors.black12,
+                  //     );
+                  //     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  //   }
+
+                  FirebaseAuth.instance
+                      .signInWithEmailAndPassword(
+                      email: _emailAddressController.text,
+                      password: _passwordAddressController.text).
+                  then((value) => {
+
+                  Navigator.pushNamed(context, "homePage")
+                  });
                 },
                 child: Container(
                   alignment: Alignment.center,
