@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:projectandroid/pages/LoginPage.dart';
 
@@ -117,6 +118,10 @@ class Signup extends StatelessWidget {
                     Container(
                       width: 250,
                       child: TextFormField(
+                        obscureText: true,
+                        style: TextStyle(
+                            color: Colors.black,fontFamily: 'SFUIDisplay'
+                        ),
                         controller: _passwordController,
                         decoration: InputDecoration(
                           border: InputBorder.none,
@@ -154,6 +159,10 @@ class Signup extends StatelessWidget {
                     Container(
                       width: 250,
                       child: TextFormField(
+                        obscureText: true,
+                        style: TextStyle(
+                            color: Colors.black,fontFamily: 'SFUIDisplay'
+                        ),
                         controller: _confirmPasswordController,
                         decoration: InputDecoration(
                           border: InputBorder.none,
@@ -164,27 +173,16 @@ class Signup extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(height: 20),
-              Container(
-                margin: EdgeInsets.only(left: 15),
-                alignment: Alignment.centerLeft,
-                child: TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    "Forget Password",
-                    style: TextStyle(
-                      color: Color(0xFF475269),
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ),
-
               SizedBox(height: 40),
               InkWell(
                 onTap: () {
-                  Navigator.pushNamed(context, "/");
+                  FirebaseAuth.instance.createUserWithEmailAndPassword(
+                      email: _emailController.text,
+                      password: _passwordController.text
+                  ).then((value) => {
+                  Navigator.pushNamed(context, "/")
+                  });
+             //
                 },
                 child: Container(
                   alignment: Alignment.center,

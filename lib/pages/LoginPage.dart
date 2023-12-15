@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:projectandroid/pages/forget_password.dart';
 
 import 'Signup.dart';
 
@@ -82,6 +83,10 @@ class LoginPage extends StatelessWidget {
                     Container(
                       width: 250,
                       child: TextFormField(
+                        obscureText: true,
+                        style: TextStyle(
+                          color: Colors.black,fontFamily: 'SFUIDisplay'
+                        ),
                         controller: _passwordAddressController,
                         decoration: InputDecoration(
                           border: InputBorder.none,
@@ -98,6 +103,7 @@ class LoginPage extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: TextButton(
                   onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => ForgetPassword()));
                   },
                   child: Text(
                     "Forget Password",
@@ -202,3 +208,4 @@ class LoginPage extends StatelessWidget {
     );
   }
 }
+
