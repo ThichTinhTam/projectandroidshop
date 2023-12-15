@@ -40,7 +40,11 @@ dependencies:
   sliding_sheet: ^0.5.2
   firebase_auth: ^4.15.2
   firebase_core: ^2.24.2
-
+  cached_network_image: ^3.3.0
+  carousel_slider: ^4.2.1
+  image_card: ^0.0.4
+  cloud_firestore: ^4.13.6
+  get: ^4.6.6
 
 dev_dependencies:
   flutter_test:

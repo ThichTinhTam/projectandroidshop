@@ -1,108 +1,84 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_card/image_card.dart';
+import 'package:projectandroid/models/categories-model.dart';
+import 'package:projectandroid/widgets/SingleCategoryProducts.dart';
 
 class RowItemsWidget extends StatelessWidget {
   const RowItemsWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: [
-          for(int i = 1; i < 5 ;i++)
-            Container(
-              margin: EdgeInsets.only(top: 10, bottom: 10, left: 15),
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              height: 180,
-              decoration: BoxDecoration(
-                color: Color(0xFFF5F9FD),
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                    color: Color(0xFF475269).withOpacity(0.3),
-                    blurRadius: 5,
-                    spreadRadius: 1,
-                  ),
-                ],
+    return FutureBuilder(
+        future: FirebaseFirestore.instance.collection('categories').get(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
+          if(snapshot.hasError){
+            print("Error: ${snapshot.error}");
+            return Center(
+              child: Text("loi"),
+            );
+          }
+          if(snapshot.connectionState == ConnectionState.waiting){
+            return Container(
+              height: 100,
+              child: Center(
+                child: CupertinoActionSheet(),
               ),
-              child: Row(
-                children: [
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(top: 20, right: 70),
-                        height: 110,
-                        width: 120,
-                        decoration: BoxDecoration(
-                          color: Color(0xFF475269),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      Image.asset(
-                        "images/$i.png",
-                        height: 150,
-                        width: 150,
-                        fit: BoxFit.contain,
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 30),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+            );
+          }
+          if(snapshot.data!.docs.isEmpty){
+            return Center(child: Text("No category found!"),
+            );
+          }
+          if(snapshot.data != null){
+            return Container(
+              height: 220,
+              child: ListView.builder(
+                  itemCount: snapshot.data!.docs.length,
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context,index){
+                    CategoriesModel categoriesModel = CategoriesModel(
+                        categoryId: snapshot.data!.docs[index]['categoryId'],
+                        categoryImg: snapshot.data!.docs[index]['categoryImg'],
+                        categoryName: snapshot.data!.docs[index]['categoryName'],
+                        createdAt: snapshot.data!.docs[index]['createdAt'],
+                        updatedAt: snapshot.data!.docs[index]['updatedAt'],
+                    );
+                    print(categoriesModel.categoryId);
+                    print(categoriesModel.categoryImg);
+                    print(categoriesModel.categoryName);
+                    print(categoriesModel.createdAt);
+                    print(categoriesModel.updatedAt);
+
+                    return Row(
                       children: [
-                        Text(
-                          "Nike Shoe",
-                          style: TextStyle(
-                            color: Color(0xFF475269),
-                            fontSize: 23,
-                            fontWeight: FontWeight.w500,
+                        GestureDetector(
+                          onTap: () => Get.to(() => SingleCategoryProducts(),),
+                          child: Padding(padding: EdgeInsets.all(5.0),
+                            child: Container(child: FillImageCard(
+                              borderRadius: 20,
+                              width: 150,
+                              heightImage: 140,
+                              imageProvider: CachedNetworkImageProvider(categoriesModel.categoryImg),
+                              title: Center(child: Text(categoriesModel.categoryName,
+                                style: TextStyle(fontSize: 12),
+                              ),
+                              ),
+                              footer: Text(''),
+                            ),),
                           ),
-                        ),
-                        SizedBox(height: 5),
-                        Text(
-                          "Men's Shoe",
-                          style: TextStyle(
-                            color: Color(0xFF475269).withOpacity(0.8),
-                            fontSize: 16,
-                          ),
-                        ),
-                        Spacer(),
-                        Row(
-                          children: [
-                            Text(
-                              "\$500.000",
-                              style: TextStyle(
-                                color: Colors.redAccent,
-                                fontSize: 22,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            SizedBox(width: 70),
-                            Container(
-                              padding: EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                color: Color(0xFF475269),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Icon(
-                                CupertinoIcons.cart_fill_badge_plus,
-                                color: Colors.white,
-                                size: 25,
-                              ),
-                            ),
-                          ],
                         ),
                       ],
-                    ),
-                  ),
-                ],
-              ),
-            )
-        ],
-      ),
+                  );
+              }),
+            );
+          }
+          return Container();
+        },
     );
   }
 }
