@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:image_card/image_card.dart';
 import 'package:projectandroid/models/categories-model.dart';
 import 'package:projectandroid/widgets/SingleCategoryProducts.dart';
@@ -48,16 +50,13 @@ class RowItemsWidget extends StatelessWidget {
                         createdAt: snapshot.data!.docs[index]['createdAt'],
                         updatedAt: snapshot.data!.docs[index]['updatedAt'],
                     );
-                    print(categoriesModel.categoryId);
-                    print(categoriesModel.categoryImg);
-                    print(categoriesModel.categoryName);
-                    print(categoriesModel.createdAt);
-                    print(categoriesModel.updatedAt);
 
                     return Row(
                       children: [
                         GestureDetector(
-                          onTap: () => Get.to(() => SingleCategoryProducts(),),
+                          onTap: () => Get.to(() => SingleCategoryProducts(
+                            categoryId: categoriesModel.categoryId
+                          )),
                           child: Padding(padding: EdgeInsets.all(5.0),
                             child: Container(child: FillImageCard(
                               borderRadius: 20,
@@ -65,7 +64,7 @@ class RowItemsWidget extends StatelessWidget {
                               heightImage: 140,
                               imageProvider: CachedNetworkImageProvider(categoriesModel.categoryImg),
                               title: Center(child: Text(categoriesModel.categoryName,
-                                style: TextStyle(fontSize: 12),
+                                style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold, color: Colors.orange),
                               ),
                               ),
                               footer: Text(''),

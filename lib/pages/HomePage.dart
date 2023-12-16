@@ -1,4 +1,7 @@
-import 'package:projectandroid/widgets/AllItemsWidget.dart';
+//import 'dart:html';
+
+import 'package:projectandroid/widgets/AllProducts.dart';
+import 'package:projectandroid/widgets/BannersWidget.dart';
 import 'package:projectandroid/widgets/RowItemsWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
@@ -38,9 +41,9 @@ class HomePage extends StatelessWidget {
                           InkWell(
                             onTap: () {Navigator.pushNamed(context, "/");},
                             child: Padding(
-                              padding: const EdgeInsets.all(10.0),
+                              padding: const EdgeInsets.all(8.0),
                               child: Icon(
-                                Icons.exit_to_app,
+                                Icons.arrow_back,
                                 size: 30,
                                 color: Colors.redAccent,
                               ),
@@ -83,10 +86,26 @@ class HomePage extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(height: 30),
+              SizedBox(height: 10),
+              BannersWidget(),
+              SizedBox(height: 10),
+              Container(
+                child: Text(
+                    "Categories ",
+                  style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold,color: Colors.black45),
+                ),
+              ),
+              SizedBox(height: 10),
               RowItemsWidget(),
-              SizedBox(height: 20),
-             // AllItemsWidget(),
+              SizedBox(height: 10),
+              Container(
+                child: Text(
+                  "Products ",
+                  style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold,color: Colors.black45),
+                ),
+              ),
+              AllProducts(),
+              //AllItemsWidget(),
             ],
           ),
         ),
