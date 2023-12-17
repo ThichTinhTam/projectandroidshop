@@ -97,7 +97,7 @@ class _CartScreenState extends State<CartScreen> {
                       )
                     ],
                     child: Container(
-                      height: 90,
+                      height: 100,
                       child: Card(
                         elevation: 5,
                         color: Colors.white,
