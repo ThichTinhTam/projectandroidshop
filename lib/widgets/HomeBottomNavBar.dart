@@ -24,36 +24,21 @@ class HomeBottomNavBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Icon(
-            Icons.category_outlined,
-            color: Colors.white,
-            size: 32,
-          ),
           InkWell(
             onTap: () {
-              showSlidingBottomSheet(
-                  context, builder: (context) {
-                return SlidingSheetDialog(
-                    elevation: 8,
-                    cornerRadius: 16,
-                    builder: (context, state) {
-                      return BottomCartSheet();
-                    }
-                );
-              }
-              );
+              Navigator.pushNamed(context, "homePage");
             },
             child: Icon(
-              CupertinoIcons.cart_fill,
+              Icons.category_outlined,
               color: Colors.white,
               size: 32,
             ),
           ),
-          Icon(
-            Icons.favorite_border,
-            color: Colors.white,
-            size: 32,
-          ),
+          // Icon(
+          //   Icons.favorite_border,
+          //   color: Colors.white,
+          //   size: 32,
+          // ),
           InkWell(
             onTap: () {
               Navigator.pushNamed(context, "User");
@@ -62,6 +47,17 @@ class HomeBottomNavBar extends StatelessWidget {
               Icons.person,
               color: Colors.white,
               size: 32,
+            ),
+          ),
+          InkWell(
+            onTap: () {Navigator.pushNamed(context, "/");},
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Icon(
+                Icons.arrow_back,
+                size: 30,
+                color: Colors.redAccent,
+              ),
             ),
           ),
         ],

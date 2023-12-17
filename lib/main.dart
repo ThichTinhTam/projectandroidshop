@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:projectandroid/pages/HomePage.dart';
 import 'package:projectandroid/pages/LoginPage.dart';
 import 'package:projectandroid/pages/User.dart';
-import 'package:projectandroid/pages/itemPage.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
@@ -25,7 +24,7 @@ class MyApp extends StatelessWidget {
       getPages: [
         GetPage(name: '/', page: () => LoginPage()),
         GetPage(name: '/homePage', page: () => HomePage()),
-        GetPage(name: '/itemPage', page: () => ItemPage()),
+       // GetPage(name: '/itemPage', page: () => ItemPage()),
         GetPage(name: '/User', page: () => User()),
       ],
       initialRoute: '/',

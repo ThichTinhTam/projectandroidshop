@@ -1,13 +1,15 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:carousel_slider/carousel_slider.dart';
+
+
+import 'package:projectandroid/widgets/BottomCartSheet.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:image_card/image_card.dart';
-import 'package:projectandroid/models/categories-model.dart';
 import 'package:projectandroid/models/product-model.dart';
+import 'package:projectandroid/models/cart-model.dart';
+
+
 
 class ItemProduct extends StatefulWidget {
   ProductModel productModel;
@@ -18,68 +20,187 @@ class ItemProduct extends StatefulWidget {
 }
 
 class _ItemProductState extends State<ItemProduct> {
+  User? user = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.redAccent,
-        title: Text(
-          "Products Details"
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(''),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Colors.redAccent,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              onPressed: () async{
+                // Xử lý khi nhấn nút "Thêm vào giỏ hàng"
+                await checkProductExistence(uId: user!.uid);
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  InkWell(
+                    onTap: () async {
+                     // Get.to(() => CartScreen());
+
+                      await checkProductExistence(uId: user!.uid);
+                    },
+                    child: Icon(
+                      Icons.shopping_cart,
+                      color: Colors.white,
+                    ),
+                  ),
+                  Text(
+                    'Thêm vào giỏ',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 17,
+                    ),
+                  ),
+
+                ],
+              ),
+            ),
+          ],
         ),
       ),
-         body: Container(
-           child: Column(
-             children: [
-
-               Container(
-                 height: Get.height/3,
-                 decoration: BoxDecoration(
-                   image:  DecorationImage(
-                         fit: BoxFit.fill,
-                        image: NetworkImage(widget.productModel.productImages),
-                   ),
-                 ),
-               ),
-              // Image.network(widget.productModel.productImages)
-
-             ],
-           ),
-         ),
-    //   body: Container(
-    //     child: Column(
-    //       children: [
-    //        //product images
-    //     CarouselSlider(
-    //     items: product.productImages
-    //         .map(
-    //         (imageUrls) =>
-    //       ClipRRect(
-    //       borderRadius: BorderRadius.circular(10.0),
-    //       child: CachedNetworkImage(
-    //          imageUrl: imageUrls,
-    //          fit: BoxFit.cover,
-    //          width: Get.width - 10,
-    //            placeholder: (context, url) =>
-    //         ColoredBox(
-    //           color: Colors.white,
-    //           child: Center(child: CupertinoActivityIndicator(),),
-    //         ),
-    //     errorWidget: (context,url,error) => Icon(Icons.error),
-    //   ),
-    // ),
-    // ).toList(),
-    // options: CarouselOptions(
-    //   scrollDirection: Axis.horizontal,
-    //   autoPlay: true,
-    //   aspectRatio: 2.5,
-    //   viewportFraction: 1,
-    // ),
-    // ),
-    //       ],
-    //     ),
-    //   ),
-
+      appBar: AppBar(
+        backgroundColor: Colors.redAccent,
+        title: Text("Products Details"),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: Get.height/60),
+            Hero(
+              tag: 'product_${widget.productModel.productID}',
+              child: Container(
+                height: Get.height / 3,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: NetworkImage(widget.productModel.productImages),
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.productModel.productName,
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    widget.productModel.price + " VND",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.redAccent,
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  Text(
+                    'Giới thiệu',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    widget.productModel.productDescription,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey.shade600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
+
+
+  Future<void> checkProductExistence({
+    required String uId,
+    int quantityIncrement = 1,
+  }) async {
+    final DocumentReference documentReference = FirebaseFirestore.instance
+        .collection('cart')
+        .doc(uId)
+        .collection('cartOrders')
+        .doc(widget.productModel.productID.toString());
+
+    DocumentSnapshot snapshot = await documentReference.get();
+
+    if (snapshot.exists) {
+      int currentQuantity = snapshot['productQuantity'];
+      int updatedQuantity = currentQuantity + quantityIncrement;
+
+      //epkieu
+      String giaString = widget.productModel.price.replaceAll('.', '');
+      double giaDouble = double.parse(giaString);
+
+      double totalPrice = giaDouble*updatedQuantity;
+      print("Tong tien la");
+      print(totalPrice);
+
+      await documentReference.update({
+        'productQuantity': updatedQuantity,
+        'productTotalPrice': totalPrice
+      });
+
+      print("product exists");
+    } else {
+      await FirebaseFirestore.instance.collection('cart').doc(uId).set(
+        {
+          'uId': uId,
+          'createdAt': DateTime.now(),
+        },
+      );
+      //epkieu
+      String giaString = widget.productModel.price.replaceAll('.', '');
+      double giaDouble = double.parse(giaString);
+      CartModel cartModel = CartModel(
+        productID: widget.productModel.productID,
+        categoryId: widget.productModel.categoryId,
+        productName: widget.productModel.productName,
+        categoryName: widget.productModel.categoryName,
+        price: widget.productModel.price,
+        productImages: widget.productModel.productImages,
+        productDescription: widget.productModel.productDescription,
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+        productQuantity: 1,
+        productTotalPrice: giaDouble,
+      );
+
+      await documentReference.set(cartModel.toMap());
+
+      print("product added");
+      print(widget.productModel.productImages);
+      print(giaDouble);
+    }
+  }
 }
+
 

@@ -69,15 +69,13 @@ class AllProducts extends StatelessWidget {
               // );
               return Row(
                 children: [
-                  // onTap: ()
-                  // => Get.to(() => SingleCategoryProducts(
-                  //     categoryId: productModel.categoryId)),
                   GestureDetector(
                     onTap: ()
                     => Get.to(() => ItemProduct(
                         productModel: productModel)),
                     child: Padding(padding: EdgeInsets.all(8.0),
                       child: Container(child: FillImageCard(
+
                         borderRadius: 20,
                         width: Get.width/2.3,
                         heightImage: Get.height/6,

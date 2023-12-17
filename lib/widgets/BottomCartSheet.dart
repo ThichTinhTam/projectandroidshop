@@ -1,331 +1,219 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:projectandroid/models/product-model.dart';
+import 'package:projectandroid/models/cart-model.dart';
+import 'package:projectandroid/controller/price-controller.dart';
+import 'package:flutter_swipe_action_cell/core/cell.dart';
 
-class BottomCartSheet extends StatelessWidget {
-  const BottomCartSheet({super.key});
+class CartScreen extends StatefulWidget {
+  const CartScreen({super.key});
 
   @override
+  State<CartScreen> createState() => _CartScreenState();
+}
+
+class _CartScreenState extends State<CartScreen> {
+  User? user = FirebaseAuth.instance.currentUser;
+  final ProductPriceController productPriceController =
+  Get.put(ProductPriceController());
+  @override
   Widget build(BuildContext context) {
-    return Material(
-      child: Container(
-        height: 600,
-        padding: EdgeInsets.only(top: 20),
-        color: Color(0xFFCEDDEE),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              height: 500,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    for(int i = 1; i < 5 ; i++)
-                      Container(
-                        margin: EdgeInsets.symmetric(vertical: 10,horizontal: 15),
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        height: 140,
-                        decoration: BoxDecoration(
-                            color: Color(0xFFF5F9FD),
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Color(0xFF475269).withOpacity(0.3),
-                                blurRadius: 5,
-                                spreadRadius: 1,
-                              )
-                            ]
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.redAccent,
+        title: Text('Cart Screen'),
+      ),
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance
+            .collection('cart')
+            .doc(user!.uid)
+            .collection('cartOrders')
+            .snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasError) {
+            return Center(
+              child: Text("Error"),
+            );
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Container(
+              height: Get.height / 5,
+              child: Center(
+                child: CupertinoActivityIndicator(),
+              ),
+            );
+          }
+
+          if (snapshot.data!.docs.isEmpty) {
+            return Center(
+              child: Text("No products found!"),
+            );
+          }
+
+          if (snapshot.data != null) {
+            return Container(
+              child: ListView.builder(
+                itemCount: snapshot.data!.docs.length,
+                shrinkWrap: true,
+                physics: BouncingScrollPhysics(),
+                itemBuilder: (context, index) {
+                  final productData = snapshot.data!.docs[index];
+                  CartModel cartModel = CartModel(
+                    productID: productData['productID'],
+                    categoryId: productData['categoryId'],
+                    productName: productData['productName'],
+                    categoryName: productData['categoryName'],
+                    price: productData['price'],
+                    productImages: productData['productImages'],
+                    productDescription: productData['productDescription'],
+                    createdAt: productData['createdAt'],
+                    updatedAt: productData['updatedAt'],
+                    productQuantity: productData['productQuantity'],
+                    productTotalPrice: double.parse(
+                        productData['productTotalPrice'].toString()),
+                  );
+
+                  //calculate price
+                  productPriceController.fetchProductPrice();
+                  return SwipeActionCell(
+                    key: ObjectKey(cartModel.productID),
+                    trailingActions: [
+                      SwipeAction(
+                        title: "Delete",
+                        forceAlignmentToBoundary: true,
+                        performsFirstActionWithFullSwipe: true,
+                        onTap: (CompletionHandler handler) async {
+                          print('deleted');
+                          await FirebaseFirestore.instance
+                              .collection('cart')
+                              .doc(user!.uid)
+                              .collection('cartOrders')
+                              .doc(cartModel.productID)
+                              .delete();
+                        },
+                      )
+                    ],
+                    child: Container(
+                      height: 90,
+                      child: Card(
+                        elevation: 5,
+                        color: Colors.white,
+                        child: Center(
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              backgroundColor: Colors.redAccent,
+                              backgroundImage:
+                              NetworkImage(cartModel.productImages),
+                            ),
+                            title: Text(cartModel.productName),
+                            subtitle: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(cartModel.productTotalPrice.toString()),
+                                SizedBox(
+                                  width: Get.width / 20.0,
+                                ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    if (cartModel.productQuantity > 1) {
+                                      await FirebaseFirestore.instance
+                                          .collection('cart')
+                                          .doc(user!.uid)
+                                          .collection('cartOrders')
+                                          .doc(cartModel.productID)
+                                          .update({
+                                        'productQuantity':
+                                        cartModel.productQuantity - 1,
+                                        'productTotalPrice':
+                                        (double.parse(cartModel.price) *
+                                            (cartModel.productQuantity - 1))
+                                      });
+                                    }
+                                  },
+                                  child: CircleAvatar(
+                                    radius: 14.0,
+                                    backgroundColor: Colors.grey,
+                                    child: Text('-'),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: Get.width / 20.0,
+                                ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    if (cartModel.productQuantity > 0) {
+                                      await FirebaseFirestore.instance
+                                          .collection('cart')
+                                          .doc(user!.uid)
+                                          .collection('cartOrders')
+                                          .doc(cartModel.productID)
+                                          .update({
+                                        'productQuantity':
+                                        cartModel.productQuantity + 1,
+                                        'productTotalPrice':
+                                        double.parse(cartModel.price) +
+                                            double.parse(cartModel.price) *
+                                                (cartModel.productQuantity)
+                                      });
+                                    }
+                                  },
+                                  child: CircleAvatar(
+                                    radius: 14.0,
+                                    backgroundColor: Colors.grey,
+                                    child: Text('+'),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
                         ),
-                        child: Row(children: [
-                          InkWell(
-                            onTap: () {
-                              Navigator.pushNamed(context, "itemPage");
-                            },
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.only(top: 10, right: 60),
-                                  height: 90,
-                                  width: 100,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xFF475269),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                ),
-                                Image.asset(
-                                  "images/$i.png",
-                                  height: 130,
-                                  width: 130,
-                                  fit: BoxFit.contain,
-                                )
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(vertical: 30),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "Nike Shoe",
-                                  style: TextStyle(
-                                    color: Color(0xFF475269),
-                                    fontSize: 23,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                Row(
-                                  children: [
-                                    Container(
-                                      padding: EdgeInsets.all(5),
-                                      decoration: BoxDecoration(
-                                          color: Color(0xFFF5F9FD),
-                                          borderRadius: BorderRadius.circular(10),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Color(0xFF475269).withOpacity(0.3),
-                                              blurRadius: 5,
-                                              spreadRadius: 1,
-                                            )
-                                          ]
-                                      ),
-                                      child: Icon(
-                                        CupertinoIcons.minus,
-                                        size: 18,
-                                      ),
-                                    ),
-                                    Container(
-                                      margin: EdgeInsets.symmetric(horizontal: 10),
-                                      child: Text(
-                                        "02",
-                                        style: TextStyle(
-                                          color: Color(0xFF475269),
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      padding: EdgeInsets.all(5),
-                                      decoration: BoxDecoration(
-                                          color: Color(0xFFF5F9FD),
-                                          borderRadius: BorderRadius.circular(10),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Color(0xFF475269).withOpacity(0.3),
-                                              blurRadius: 5,
-                                              spreadRadius: 1,
-                                            )
-                                          ]
-                                      ),
-                                      child: Icon(
-                                        CupertinoIcons.add,
-                                        size: 18,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                          Spacer(),
-                          Padding(
-                            padding: EdgeInsets.symmetric(vertical: 25),
-                            child: Column(
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(10),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Color(0xFF475269).withOpacity(0.4),
-                                          blurRadius: 5,
-                                          spreadRadius: 1,
-                                        )
-                                      ]
-                                  ),
-                                  child: Icon(
-                                    Icons.delete,
-                                    color: Colors.red,
-                                    size: 20,
-                                  ),
-                                ),
-                                Spacer(),
-                                Text(
-                                  "\$550000",
-                                  style: TextStyle(
-                                    color: Color(0xFF475269),
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 20,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ],),
-                      ),
-                    Container(
-                      margin: EdgeInsets.symmetric(vertical: 10,horizontal: 15),
-                      padding: EdgeInsets.all(15),
-                      decoration: BoxDecoration(
-                          color: Color(0xFFF5F9FD),
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Color(0xFF475269).withOpacity(0.3),
-                              spreadRadius: 1,
-                              blurRadius: 5,
-                            )
-                          ]
-                      ),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Delivery Fee: ",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF475269),
-                                ),
-                              ),
-                              Text(
-                                "\$200000 ",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF475269),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Divider(
-                              height: 20,
-                              thickness: 0.4,
-                              color: Color(0xFF475269)
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Sub-Total: ",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF475269),
-                                ),
-                              ),
-                              Text(
-                                "\$800000 ",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF475269),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Divider(
-                              height: 20,
-                              thickness: 0.4,
-                              color: Color(0xFF475269)
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Discount: ",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF475269),
-                                ),
-                              ),
-                              Text(
-                                "-\$100000 ",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.redAccent,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
                       ),
                     ),
-                  ],
+                  );
+                },
+              ),
+            );
+          }
+
+          return Container();
+        },
+      ),
+      bottomNavigationBar: Container(
+        margin: EdgeInsets.only(bottom: 5.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Obx(
+                  () => Text(
+                " Total ${productPriceController.totalPrice.value.toStringAsFixed(1)} VND",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Material(
+                child: Container(
+                  width: Get.width / 2.0,
+                  height: Get.height / 18,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  child: TextButton(
+                    child: Text(
+                      "Checkout",
+                      style: TextStyle(color: Colors.redAccent),
+                    ),
+                    onPressed: () {
+                    //  Get.to(() => CheckOutScreen());
+                    },
+                  ),
                 ),
               ),
             ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              height: 80,
-              decoration: BoxDecoration(
-                  color: Color(0xFFF5F9FD),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(25),
-                    topRight: Radius.circular(25),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color(0xFF475269).withOpacity(0.3),
-                      spreadRadius: 1,
-                      blurRadius: 5,
-                    )
-                  ]
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Total",
-                        style: TextStyle(
-                          fontSize: 22,
-                          color: Color(0xFF475269),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        "\$12000000",
-                        style: TextStyle(
-                          fontSize: 22,
-                          color: Colors.redAccent,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                  InkWell(
-                    onTap: () {},
-                    child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 15,horizontal: 20),
-                      decoration: BoxDecoration(
-                        color: Color(0xFF475269),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Text(
-                        "Check out",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight:FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            )
           ],
         ),
       ),

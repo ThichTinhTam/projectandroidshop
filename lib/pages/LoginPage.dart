@@ -2,14 +2,18 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:projectandroid/pages/forget_password.dart';
-
+import 'package:projectandroid/controller/signin.dart';
+import 'HomePage.dart';
 import 'Signup.dart';
+import 'package:get/get.dart';
+
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final SignInController signInController = Get.put(SignInController());
     TextEditingController _emailAddressController = TextEditingController();
     TextEditingController _passwordAddressController = TextEditingController();
     return Scaffold(
@@ -117,41 +121,52 @@ class LoginPage extends StatelessWidget {
               ),
               SizedBox(height: 40),
               InkWell(
-                onTap: () {
+                onTap: () async {
                   String email = _emailAddressController.text.trim();
-                  String pass = _passwordAddressController.text.trim();
-                  if (email.isEmpty || pass.isEmpty) {
-                    final snackBar = SnackBar(
-                      content: Text('Bạn chưa nhập đầy đủ thông tin'),
-                      backgroundColor: Colors.black12,
+                  String password = _passwordAddressController.text.trim();
+
+                  if (email.isEmpty || password.isEmpty) {
+                    Get.snackbar(
+                      "Lỗi",
+                      "Bạn chưa nhập đầy đủ thông tin",
+                      snackPosition: SnackPosition.BOTTOM,
+                      backgroundColor: Colors.black45,
+                      colorText: Colors.orange,
                     );
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  } else {
+
+                    UserCredential? userCredential = await signInController
+                        .signInMethod(email, password);
+                    if (userCredential != null) {
+                        Get.snackbar(
+                          "Thành công",
+                          "Đăng nhập thành công",
+                          snackPosition: SnackPosition.BOTTOM,
+                          backgroundColor: Colors.black45,
+                          colorText: Colors.orange,
+                        );
+                        Get.offAll(() => HomePage());
+                      // FirebaseAuth.instance
+                      //     .signInWithEmailAndPassword(
+                      //     email: _emailAddressController.text,
+                      //     password: _passwordAddressController.text).
+                      // then((value) => {
+                      //
+                      // Navigator.pushNamed(context, "homePage")
+                      }
+                     else {
+                      Get.snackbar(
+                        "Lỗi",
+                        "Hãy kiểm tra lại ",
+                        snackPosition: SnackPosition.BOTTOM,
+                        backgroundColor: Colors.black45,
+                        colorText: Colors.orange,
+                      );
+                    }
                   }
-                  // if (email == _emailAddressController  && pass == _passwordAddressController) {
-                  //   final snackBar = SnackBar(
-                  //     content: Text('Đăng nhập thành công'),
-                  //     backgroundColor: Colors.black12,
-                  //   );
-                  //   ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  // }
-                  //   if {
-                  //     final snackBar = SnackBar(
-                  //       content: Text('Đăng nhập không thành công'),
-                  //       backgroundColor: Colors.black12,
-                  //     );
-                  //     ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  //   }
-
-                  FirebaseAuth.instance
-                      .signInWithEmailAndPassword(
-                      email: _emailAddressController.text,
-                      password: _passwordAddressController.text).
-                  then((value) => {
-
-                  Navigator.pushNamed(context, "homePage")
-                  });
                 },
                 child: Container(
+
                   alignment: Alignment.center,
                   margin: EdgeInsets.symmetric(horizontal: 20),
                   padding: EdgeInsets.symmetric(horizontal: 15),
@@ -189,7 +204,7 @@ class LoginPage extends StatelessWidget {
                       fontSize: 16,
                     ),
                   ),
-                  TextButton(onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => Signup(),),),
+                  TextButton(onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => SignUpScreen(),),),
                       child: Text(
                         "Sign up",
                         style: TextStyle(

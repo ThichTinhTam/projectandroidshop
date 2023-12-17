@@ -1,10 +1,10 @@
-//import 'dart:html';
-
 import 'package:projectandroid/widgets/AllProducts.dart';
 import 'package:projectandroid/widgets/BannersWidget.dart';
 import 'package:projectandroid/widgets/RowItemsWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
+import 'package:get/get.dart';
+import 'package:projectandroid/widgets/BottomCartSheet.dart';
 
 import '../widgets/HomeBottomNavBar.dart';
 
@@ -39,14 +39,13 @@ class HomePage extends StatelessWidget {
                       child: Row(
                         children: [
                           InkWell(
-                            onTap: () {Navigator.pushNamed(context, "/");},
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Icon(
-                                Icons.arrow_back,
-                                size: 30,
-                                color: Colors.redAccent,
-                              ),
+                            onTap: () {
+                               Get.to(() => CartScreen());
+                                    },
+                            child: Icon(
+                              Icons.shopping_cart,
+                              color: Colors.redAccent,
+                              size: 32,
                             ),
                           ),
                         ],
@@ -86,6 +85,7 @@ class HomePage extends StatelessWidget {
                   ],
                 ),
               ),
+
               SizedBox(height: 10),
               BannersWidget(),
               SizedBox(height: 10),
