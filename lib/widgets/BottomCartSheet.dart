@@ -75,7 +75,9 @@ class _CartScreenState extends State<CartScreen> {
                     productTotalPrice: double.parse(
                         productData['productTotalPrice'].toString()),
                   );
+                  String giaString = cartModel.price.replaceAll('.', '');
 
+                  double giaDouble = double.parse(giaString);
                   //calculate price
                   productPriceController.fetchProductPrice();
                   return SwipeActionCell(
@@ -128,7 +130,7 @@ class _CartScreenState extends State<CartScreen> {
                                         'productQuantity':
                                         cartModel.productQuantity - 1,
                                         'productTotalPrice':
-                                        (double.parse(cartModel.price) *
+                                        ((giaDouble) *
                                             (cartModel.productQuantity - 1))
                                       });
                                     }
@@ -154,8 +156,8 @@ class _CartScreenState extends State<CartScreen> {
                                         'productQuantity':
                                         cartModel.productQuantity + 1,
                                         'productTotalPrice':
-                                        double.parse(cartModel.price) +
-                                            double.parse(cartModel.price) *
+                                        (giaDouble)  +
+                                            (giaDouble) *
                                                 (cartModel.productQuantity)
                                       });
                                     }

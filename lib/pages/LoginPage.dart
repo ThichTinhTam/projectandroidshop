@@ -42,7 +42,7 @@ class LoginPage extends StatelessWidget {
                 child: Row(
                   children: [
                     Icon(
-                      Icons.person,
+                      Icons.email,
                       size: 27,
                       color: Color(0xFF475269),
                     ),
@@ -53,7 +53,7 @@ class LoginPage extends StatelessWidget {
                         controller: _emailAddressController,
                         decoration: InputDecoration(
                           border: InputBorder.none,
-                          hintText: "Enter Username",
+                          hintText: "Enter Email",
                         ),
                       ),
                     )
@@ -166,7 +166,6 @@ class LoginPage extends StatelessWidget {
                   }
                 },
                 child: Container(
-
                   alignment: Alignment.center,
                   margin: EdgeInsets.symmetric(horizontal: 20),
                   padding: EdgeInsets.symmetric(horizontal: 15),
