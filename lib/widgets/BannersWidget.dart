@@ -20,8 +20,7 @@ class _BannersWidgetState extends State<BannersWidget> {
   Widget build(BuildContext context) {
     return Container(
       child: Obx(
-              ()
-    {
+              () {
       return CarouselSlider(
           items: _bannerController.bannerUrls
               .map(
@@ -35,7 +34,9 @@ class _BannersWidgetState extends State<BannersWidget> {
                     placeholder: (context, url) =>
                         ColoredBox(
                           color: Colors.white,
-                          child: Center(child: CupertinoActivityIndicator(),),
+                          child: Center(
+                         //   child: CupertinoActivityIndicator(),
+                          ),
                         ),
                     errorWidget: (context,url,error) => Icon(Icons.error),
                   ),

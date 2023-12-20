@@ -9,6 +9,9 @@ import 'package:get/get.dart';
 import 'package:projectandroid/models/product-model.dart';
 import 'package:projectandroid/models/cart-model.dart';
 
+import '../controller/productquatity.dart';
+
+
 
 
 class ItemProduct extends StatefulWidget {
@@ -21,6 +24,7 @@ class ItemProduct extends StatefulWidget {
 
 class _ItemProductState extends State<ItemProduct> {
   User? user = FirebaseAuth.instance.currentUser;
+  final ProductQuantityController productQuantityController = Get.put(ProductQuantityController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,7 +51,6 @@ class _ItemProductState extends State<ItemProduct> {
                   InkWell(
                     onTap: () async {
                      // Get.to(() => CartScreen());
-
                       await checkProductExistence(uId: user!.uid);
                     },
                     child: Icon(
@@ -71,8 +74,51 @@ class _ItemProductState extends State<ItemProduct> {
         ),
       ),
       appBar: AppBar(
-        backgroundColor: Colors.redAccent,
-        title: Text("Products Details"),
+        backgroundColor: Colors.orangeAccent,
+        title: Text("Thông tin sản phẩm"),
+        actions: [
+          GestureDetector(
+            onTap: () => Get.to(() => CartScreen()),
+            child: Stack(
+                children: <Widget>[
+                  Padding(
+                    padding:
+                    const EdgeInsets.only(top: 18, bottom: 8, right: 10, left: 10),
+                    child: Icon(
+                      Icons.shopping_cart,
+                      color: Colors.redAccent,
+                      size: 32,
+                    ),
+                  ),
+                  Positioned(
+                      top: 15,
+                      left: 4,
+                      child: Container(
+                        padding: EdgeInsets.all(1),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        constraints: BoxConstraints(
+                          minWidth: 12,
+                          minHeight: 12,
+                        ),
+                        child: Obx
+                          ( ()=>Text(
+                          '${productQuantityController.soluong.value}', // Số lượng sản phẩm trong giỏ hàng
+                          style: TextStyle(
+                            color: Colors.blueGrey,
+                            fontSize: 12,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        ),
+
+                      )),
+                ]
+            ),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -168,7 +214,14 @@ class _ItemProductState extends State<ItemProduct> {
         'productQuantity': updatedQuantity,
         'productTotalPrice': totalPrice
       });
-
+      Get.snackbar(
+        "Thêm sản phẩm thành công",
+        "",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.orange,
+        colorText: Colors.green,
+      );
+      productQuantityController.fetchProductQuantity();
       print("product exists");
     } else {
       await FirebaseFirestore.instance.collection('cart').doc(uId).set(
@@ -195,8 +248,15 @@ class _ItemProductState extends State<ItemProduct> {
       );
 
       await documentReference.set(cartModel.toMap());
-
-      print("product added");
+      Get.snackbar(
+        "Thêm sản phẩm thành công",
+        "",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.orange,
+        colorText: Colors.green,
+      );
+      productQuantityController.fetchProductQuantity();
+      print("đã thêm ");
       print(widget.productModel.productImages);
       print(giaDouble);
     }

@@ -1,0 +1,17 @@
+C:\Users\ASUS\OneDrive\Desktop\.NET-Framework\ProjectGroup01\Test\bin\Debug\net6.0-windows\20T1020639.exe
+C:\Users\ASUS\OneDrive\Desktop\.NET-Framework\ProjectGroup01\Test\bin\Debug\net6.0-windows\20T1020639.deps.json
+C:\Users\ASUS\OneDrive\Desktop\.NET-Framework\ProjectGroup01\Test\bin\Debug\net6.0-windows\20T1020639.runtimeconfig.json
+C:\Users\ASUS\OneDrive\Desktop\.NET-Framework\ProjectGroup01\Test\bin\Debug\net6.0-windows\20T1020639.dll
+C:\Users\ASUS\OneDrive\Desktop\.NET-Framework\ProjectGroup01\Test\bin\Debug\net6.0-windows\20T1020639.pdb
+C:\Users\ASUS\OneDrive\Desktop\.NET-Framework\ProjectGroup01\Test\obj\Debug\net6.0-windows\Test.FormSanPham.resources
+C:\Users\ASUS\OneDrive\Desktop\.NET-Framework\ProjectGroup01\Test\obj\Debug\net6.0-windows\20T1020639.Properties.Resources.resources
+C:\Users\ASUS\OneDrive\Desktop\.NET-Framework\ProjectGroup01\Test\obj\Debug\net6.0-windows\20T1020639.csproj.GenerateResource.cache
+C:\Users\ASUS\OneDrive\Desktop\.NET-Framework\ProjectGroup01\Test\obj\Debug\net6.0-windows\20T1020639.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ASUS\OneDrive\Desktop\.NET-Framework\ProjectGroup01\Test\obj\Debug\net6.0-windows\20T1020639.AssemblyInfoInputs.cache
+C:\Users\ASUS\OneDrive\Desktop\.NET-Framework\ProjectGroup01\Test\obj\Debug\net6.0-windows\20T1020639.AssemblyInfo.cs
+C:\Users\ASUS\OneDrive\Desktop\.NET-Framework\ProjectGroup01\Test\obj\Debug\net6.0-windows\20T1020639.csproj.CoreCompileInputs.cache
+C:\Users\ASUS\OneDrive\Desktop\.NET-Framework\ProjectGroup01\Test\obj\Debug\net6.0-windows\20T1020639.dll
+C:\Users\ASUS\OneDrive\Desktop\.NET-Framework\ProjectGroup01\Test\obj\Debug\net6.0-windows\refint\20T1020639.dll
+C:\Users\ASUS\OneDrive\Desktop\.NET-Framework\ProjectGroup01\Test\obj\Debug\net6.0-windows\20T1020639.pdb
+C:\Users\ASUS\OneDrive\Desktop\.NET-Framework\ProjectGroup01\Test\obj\Debug\net6.0-windows\20T1020639.genruntimeconfig.cache
+C:\Users\ASUS\OneDrive\Desktop\.NET-Framework\ProjectGroup01\Test\obj\Debug\net6.0-windows\ref\20T1020639.dll

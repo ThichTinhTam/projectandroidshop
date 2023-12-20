@@ -27,7 +27,7 @@ class RowItemsWidget extends StatelessWidget {
             return Container(
               height: 100,
               child: Center(
-                child: CupertinoActionSheet(),
+           //     child: CupertinoActionSheet(),
               ),
             );
           }

@@ -4,6 +4,7 @@ import 'package:projectandroid/pages/HomePage.dart';
 import 'package:projectandroid/pages/LoginPage.dart';
 import 'package:projectandroid/pages/User.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:projectandroid/pages/aboutus.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/homePage', page: () => HomePage()),
        // GetPage(name: '/itemPage', page: () => ItemPage()),
         GetPage(name: '/User', page: () => User()),
+        GetPage(name: '/aboutus', page: () => AboutUs()),
       ],
       initialRoute: '/',
     );

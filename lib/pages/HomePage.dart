@@ -14,98 +14,118 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.orangeAccent,
+        title: Text('VietShoe',
+          style: TextStyle(
+          fontSize: 25,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
+        ),
+        centerTitle: true,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 15),
+            child: Row(
+              children: [
+                InkWell(
+                  onTap: () {
+                    Get.to(() => CartScreen());
+                  },
+                  child: Icon(
+                    Icons.shopping_cart,
+                    color: Colors.white,
+                    size: 32,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: EdgeInsets.all(10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: Color(0xFFF5F9FD),
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Color(0xFF475269).withOpacity(0.3),
-                            blurRadius: 5,
-                            spreadRadius: 1,
-                          )
-                        ],
-                      ),
-                      child: Row(
-                        children: [
-                          InkWell(
-                            onTap: () {
-                               Get.to(() => CartScreen());
-                                    },
-                            child: Icon(
-                              Icons.shopping_cart,
-                              color: Colors.redAccent,
-                              size: 32,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.all(15),
-                      decoration: BoxDecoration(
-                        color: Color(0xFFF5F9FD),
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Color(0xFF475269).withOpacity(0.3),
-                            blurRadius: 5,
-                            spreadRadius: 1,
-                          )
-                        ],
-                      ),
-                      child: badges.Badge( badgeStyle: badges.BadgeStyle(
-                        shape: badges.BadgeShape.circle,
-                        badgeColor: Colors.redAccent,
-                        padding: EdgeInsets.all(7),
-                      ),
-                        badgeContent: Text(
-                          "3",
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                        child: Icon(
-                          Icons.notifications,
-                          size: 30,
-                          color: Color(0xFF475269),
+              SizedBox(height: 10),
+              Container(
+                width: 600,
+                decoration: BoxDecoration(
+                  color: Colors.orangeAccent,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 15.0),
+                  child: Center(// Màu xanh của thanh
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        "VietShoe, nơi nâng niu bàn chân Việt",
+                        style: TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white, // Màu chữ trắng
                         ),
                       ),
                     ),
-                  ],
+                  ),
                 ),
               ),
-
               SizedBox(height: 10),
               BannersWidget(),
               SizedBox(height: 10),
               Container(
-                child: Text(
-                    "Categories ",
-                  style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold,color: Colors.black45),
+                width: 600,
+                decoration: BoxDecoration(
+                  color: Colors.orangeAccent,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 15.0),
+                  child: Center(// Màu xanh của thanh
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        "Loại sản phẩm",
+                        style: TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white, // Màu chữ trắng
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ),
               SizedBox(height: 10),
               RowItemsWidget(),
               SizedBox(height: 10),
               Container(
-                child: Text(
-                  "Products ",
-                  style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold,color: Colors.black45),
+                width: 600,
+                decoration: BoxDecoration(
+                  color: Colors.orangeAccent,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 15.0),
+                  child: Center(// Màu xanh của thanh
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        "Sản phẩm",
+                        style: TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white, // Màu chữ trắng
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ),
               AllProducts(),
               //AllItemsWidget(),
+
             ],
           ),
         ),

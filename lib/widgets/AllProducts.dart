@@ -28,12 +28,12 @@ class AllProducts extends StatelessWidget {
           return Container(
             height: 300,
             child: Center(
-              child: CupertinoActionSheet(),
+              // child: CupertinoActionSheet(),
             ),
           );
         }
         if (snapshot.data!.docs.isEmpty) {
-          return Center(child: Text("No category found!"),
+          return Center(child: Text("khong co san pham nao!"),
           );
         }
         if(snapshot.data != null){

@@ -9,6 +9,8 @@ import 'package:projectandroid/models/categories-model.dart';
 import 'package:projectandroid/models/product-model.dart';
 import 'package:projectandroid/widgets/ItemProduct.dart';
 
+import 'BottomCartSheet.dart';
+
 
 class SingleCategoryProducts extends StatefulWidget {
   String categoryId;
@@ -23,8 +25,27 @@ class _SingleCategoryProductsState extends State<SingleCategoryProducts> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.redAccent,
-        title: Text('Products'),
+        backgroundColor: Colors.orangeAccent,
+        title: Text('Sản phẩm'),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 15),
+            child: Row(
+              children: [
+                InkWell(
+                  onTap: () {
+                    Get.to(() => CartScreen());
+                  },
+                  child: Icon(
+                    Icons.shopping_cart,
+                    color: Colors.white,
+                    size: 32,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
       body: FutureBuilder(
         future: FirebaseFirestore.instance.collection('products').where(
@@ -41,7 +62,7 @@ class _SingleCategoryProductsState extends State<SingleCategoryProducts> {
             return Container(
               height: Get.height /5,
               child: Center(
-                child: CupertinoActionSheet(),
+           //     child: CupertinoActionSheet(),
               ),
             );
           }

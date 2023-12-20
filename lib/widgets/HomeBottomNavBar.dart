@@ -15,7 +15,7 @@ class HomeBottomNavBar extends StatelessWidget {
       height: 65,
       padding: EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
-          color: Color(0xFF475269),
+          color: Colors.orangeAccent,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(25),
             topRight: Radius.circular(25),
@@ -45,6 +45,16 @@ class HomeBottomNavBar extends StatelessWidget {
             },
             child: Icon(
               Icons.person,
+              color: Colors.white,
+              size: 32,
+            ),
+          ),
+          InkWell(
+            onTap: () {
+              Navigator.pushNamed(context, "aboutus");
+            },
+            child: Icon(
+              Icons.info_rounded,
               color: Colors.white,
               size: 32,
             ),

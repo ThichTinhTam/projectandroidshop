@@ -23,8 +23,16 @@ class _CartScreenState extends State<CartScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.redAccent,
-        title: Text('Cart Screen'),
+        backgroundColor: Colors.orangeAccent,
+        title: Row(
+          children: [
+            Icon(Icons.shopping_cart,
+              color: Colors.white,
+              size: 25,
+            ),
+            Text(' Giỏ Hàng'),
+          ],
+        ),
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
@@ -42,14 +50,13 @@ class _CartScreenState extends State<CartScreen> {
             return Container(
               height: Get.height / 5,
               child: Center(
-                child: CupertinoActivityIndicator(),
+            //    child: CupertinoActivityIndicator(),
               ),
             );
           }
-
           if (snapshot.data!.docs.isEmpty) {
             return Center(
-              child: Text("No products found!"),
+              child: Text("khong co san pham!"),
             );
           }
 
@@ -99,7 +106,7 @@ class _CartScreenState extends State<CartScreen> {
                       )
                     ],
                     child: Container(
-                      height: 100,
+                      height: 110,
                       child: Card(
                         elevation: 5,
                         color: Colors.white,
@@ -110,11 +117,15 @@ class _CartScreenState extends State<CartScreen> {
                               backgroundImage:
                               NetworkImage(cartModel.productImages),
                             ),
-                            title: Text(cartModel.productName),
+                            title: Text(cartModel.productName,
+                                style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold, color: Colors.black87)
+                            ),
                             subtitle: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Text(cartModel.productTotalPrice.toString()),
+                                Text(cartModel.productTotalPrice.toString(),
+                                style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500, color: Colors.redAccent)
+                                  ,),
                                 SizedBox(
                                   width: Get.width / 20.0,
                                 ),
@@ -141,8 +152,9 @@ class _CartScreenState extends State<CartScreen> {
                                     child: Text('-'),
                                   ),
                                 ),
-                                SizedBox(
-                                  width: Get.width / 20.0,
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 10,left: 10),
+                                  child: Text('${cartModel.productQuantity}'),
                                 ),
                                 GestureDetector(
                                   onTap: () async {
