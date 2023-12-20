@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:projectandroid/models/product-model.dart';
 import 'package:projectandroid/models/cart-model.dart';
 import 'package:projectandroid/controller/price-controller.dart';
@@ -83,10 +84,15 @@ class _CartScreenState extends State<CartScreen> {
                         productData['productTotalPrice'].toString()),
                   );
                   String giaString = cartModel.price.replaceAll('.', '');
-
                   double giaDouble = double.parse(giaString);
+                  double total = cartModel.productTotalPrice;
+
+
+                  final formatter = NumberFormat('#,###');
+                  String totalString = formatter.format(total);
                   //calculate price
                   productPriceController.fetchProductPrice();
+
                   return SwipeActionCell(
                     key: ObjectKey(cartModel.productID),
                     trailingActions: [
@@ -123,7 +129,8 @@ class _CartScreenState extends State<CartScreen> {
                             subtitle: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Text(cartModel.productTotalPrice.toString(),
+                                Text(
+                                  totalString,
                                 style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500, color: Colors.redAccent)
                                   ,),
                                 SizedBox(
@@ -202,7 +209,7 @@ class _CartScreenState extends State<CartScreen> {
           children: [
             Obx(
                   () => Text(
-                " Total ${productPriceController.totalPrice.value.toStringAsFixed(1)} VND",
+                " Tổng tiền: ${NumberFormat('#,###').format(productPriceController.totalPrice.value)} VND",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
@@ -218,7 +225,7 @@ class _CartScreenState extends State<CartScreen> {
                   ),
                   child: TextButton(
                     child: Text(
-                      "Checkout",
+                      "Thanh Toán",
                       style: TextStyle(color: Colors.redAccent),
                     ),
                     onPressed: () {

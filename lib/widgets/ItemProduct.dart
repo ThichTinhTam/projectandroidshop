@@ -36,7 +36,7 @@ class _ItemProductState extends State<ItemProduct> {
             Text(''),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary: Colors.redAccent,
+                primary: Colors.orangeAccent,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),

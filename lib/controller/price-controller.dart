@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
 class ProductPriceController extends GetxController {
-  RxDouble totalPrice = 0.0.obs;
+  RxInt totalPrice = 0.obs;
   User? user = FirebaseAuth.instance.currentUser;
 
   @override
@@ -22,15 +22,14 @@ class ProductPriceController extends GetxController {
         .collection('cartOrders')
         .get();
 
-    double sum = 0.0;
+    int sum = 0;
 
     for (final doc in snapshot.docs) {
       final data = doc.data();
       if (data != null && data.containsKey('productTotalPrice')) {
-        sum += (data['productTotalPrice'] as num).toDouble();
+        sum += (data['productTotalPrice'] as num).toInt();
       }
     }
-
     totalPrice.value = sum;
   }
 }
