@@ -34,6 +34,16 @@ class HomeBottomNavBar extends StatelessWidget {
               size: 32,
             ),
           ),
+          InkWell(
+            onTap: () {
+              Navigator.pushNamed(context, "search");
+            },
+            child: Icon(
+              Icons.search,
+              color: Colors.white,
+              size: 32,
+            ),
+          ),
           // Icon(
           //   Icons.favorite_border,
           //   color: Colors.white,

@@ -9,6 +9,7 @@ import 'package:projectandroid/models/categories-model.dart';
 import 'package:projectandroid/models/product-model.dart';
 import 'package:projectandroid/widgets/ItemProduct.dart';
 
+import '../controller/productquatity.dart';
 import 'BottomCartSheet.dart';
 
 
@@ -21,6 +22,7 @@ class SingleCategoryProducts extends StatefulWidget {
 }
 
 class _SingleCategoryProductsState extends State<SingleCategoryProducts> {
+  final ProductQuantityController productQuantityController = Get.put(ProductQuantityController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,14 +34,45 @@ class _SingleCategoryProductsState extends State<SingleCategoryProducts> {
             padding: const EdgeInsets.only(right: 15),
             child: Row(
               children: [
-                InkWell(
-                  onTap: () {
-                    Get.to(() => CartScreen());
-                  },
-                  child: Icon(
-                    Icons.shopping_cart,
-                    color: Colors.white,
-                    size: 32,
+                GestureDetector(
+                  onTap: () => Get.to(() => CartScreen()),
+                  child: Stack(
+                      children: <Widget>[
+                        Padding(
+                          padding:
+                          const EdgeInsets.only(top: 18, bottom: 8, right: 10, left: 10),
+                          child: Icon(
+                            Icons.shopping_cart,
+                            color: Colors.redAccent,
+                            size: 32,
+                          ),
+                        ),
+                        Positioned(
+                            top: 15,
+                            left: 4,
+                            child: Container(
+                              padding: EdgeInsets.all(1),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              constraints: BoxConstraints(
+                                minWidth: 12,
+                                minHeight: 12,
+                              ),
+                              child: Obx
+                                ( ()=>Text(
+                                '${productQuantityController.soluong.value}', // Số lượng sản phẩm trong giỏ hàng
+                                style: TextStyle(
+                                  color: Colors.blueGrey,
+                                  fontSize: 12,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              ),
+
+                            )),
+                      ]
                   ),
                 ),
               ],

@@ -119,7 +119,8 @@ class _CartScreenState extends State<CartScreen> {
                         child: Center(
                           child: ListTile(
                             leading: CircleAvatar(
-                              backgroundColor: Colors.redAccent,
+                              radius: 40,
+                              backgroundColor: Colors.orangeAccent,
                               backgroundImage:
                               NetworkImage(cartModel.productImages),
                             ),
@@ -134,7 +135,7 @@ class _CartScreenState extends State<CartScreen> {
                                 style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500, color: Colors.redAccent)
                                   ,),
                                 SizedBox(
-                                  width: Get.width / 20.0,
+                                  width: Get.width / 7.0,
                                 ),
                                 GestureDetector(
                                   onTap: () async {

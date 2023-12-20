@@ -60,13 +60,7 @@ class AllProducts extends StatelessWidget {
                 createdAt: productData['createdAt'],
                 updatedAt: productData['updatedAt'],
               );
-              // CategoriesModel categoriesModel = CategoriesModel(
-              //   categoryId: snapshot.data!.docs[index]['categoryId'],
-              //   categoryImg: snapshot.data!.docs[index]['categoryImg'],
-              //   categoryName: snapshot.data!.docs[index]['categoryName'],
-              //   createdAt: snapshot.data!.docs[index]['createdAt'],
-              //   updatedAt: snapshot.data!.docs[index]['updatedAt'],
-              // );
+
               return Row(
                 children: [
                   GestureDetector(
@@ -75,7 +69,6 @@ class AllProducts extends StatelessWidget {
                         productModel: productModel)),
                     child: Padding(padding: EdgeInsets.all(8.0),
                       child: Container(child: FillImageCard(
-
                         borderRadius: 20,
                         width: Get.width/2.3,
                         heightImage: Get.height/6,
