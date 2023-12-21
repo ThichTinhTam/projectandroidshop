@@ -1,7 +1,10 @@
+import 'package:get/get.dart';
 import 'package:projectandroid/widgets/BottomCartSheet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
+
+import '../controller/productquatity.dart';
 
 
 
@@ -11,6 +14,7 @@ class HomeBottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ProductQuantityController productQuantityController = Get.put(ProductQuantityController());
     return Container(
       height: 65,
       padding: EdgeInsets.symmetric(horizontal: 20),
@@ -34,14 +38,42 @@ class HomeBottomNavBar extends StatelessWidget {
               size: 32,
             ),
           ),
-          InkWell(
-            onTap: () {
-              Navigator.pushNamed(context, "search");
-            },
-            child: Icon(
-              Icons.search,
-              color: Colors.white,
-              size: 32,
+          GestureDetector(
+            onTap: () => Get.to(() => CartScreen()),
+            child: Stack(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(top: 5, bottom: 7, right: 10, left: 22),
+                  child: Icon(
+                    Icons.shopping_cart,
+                    color: Colors.redAccent,
+                    size: 32,
+                  ),
+                ),
+                Positioned(
+                  top: 2,
+                  left: 18,
+                  child: Container(
+                    padding: EdgeInsets.all(1),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    constraints: BoxConstraints(
+                      minWidth: 12,
+                      minHeight: 12,
+                    ),
+                    child: Obx(() => Text(
+                      '${productQuantityController.soluong.value}',
+                      style: TextStyle(
+                        color: Colors.blueGrey,
+                        fontSize: 12,
+                      ),
+                      textAlign: TextAlign.center,
+                    )),
+                  ),
+                ),
+              ],
             ),
           ),
           // Icon(
