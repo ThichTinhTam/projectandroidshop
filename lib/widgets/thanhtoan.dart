@@ -8,19 +8,22 @@ import 'package:projectandroid/models/product-model.dart';
 import 'package:projectandroid/models/cart-model.dart';
 import 'package:projectandroid/controller/price-controller.dart';
 import 'package:flutter_swipe_action_cell/core/cell.dart';
-import 'package:projectandroid/widgets/thanhtoan.dart';
 
-class CartScreen extends StatefulWidget {
-  const CartScreen({super.key});
+import '../servide/placeorder.dart';
 
+class DatHang extends StatefulWidget {
+  const DatHang({super.key});
   @override
-  State<CartScreen> createState() => _CartScreenState();
+  State<DatHang> createState() => _DatHangState();
 }
 
-class _CartScreenState extends State<CartScreen> {
+class _DatHangState extends State<DatHang> {
   User? user = FirebaseAuth.instance.currentUser;
   final ProductPriceController productPriceController =
   Get.put(ProductPriceController());
+  TextEditingController nameController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +35,7 @@ class _CartScreenState extends State<CartScreen> {
               color: Colors.white,
               size: 25,
             ),
-            Text(' Giỏ Hàng'),
+            Text(' Đặt Hàng'),
           ],
         ),
       ),
@@ -52,7 +55,7 @@ class _CartScreenState extends State<CartScreen> {
             return Container(
               height: Get.height / 5,
               child: Center(
-            //    child: CupertinoActivityIndicator(),
+                //    child: CupertinoActivityIndicator(),
               ),
             );
           }
@@ -133,62 +136,15 @@ class _CartScreenState extends State<CartScreen> {
                               children: [
                                 Text(
                                   totalString,
-                                style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500, color: Colors.redAccent)
+                                  style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500, color: Colors.redAccent)
                                   ,),
                                 SizedBox(
                                   width: Get.width / 7.0,
-                                ),
-                                GestureDetector(
-                                  onTap: () async {
-                                    if (cartModel.productQuantity > 1) {
-                                      await FirebaseFirestore.instance
-                                          .collection('cart')
-                                          .doc(user!.uid)
-                                          .collection('cartOrders')
-                                          .doc(cartModel.productID)
-                                          .update({
-                                        'productQuantity':
-                                        cartModel.productQuantity - 1,
-                                        'productTotalPrice':
-                                        ((giaDouble) *
-                                            (cartModel.productQuantity - 1))
-                                      });
-                                    }
-                                  },
-                                  child: CircleAvatar(
-                                    radius: 14.0,
-                                    backgroundColor: Colors.grey,
-                                    child: Text('-'),
-                                  ),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(right: 10,left: 10),
                                   child: Text('${cartModel.productQuantity}'),
                                 ),
-                                GestureDetector(
-                                  onTap: () async {
-                                    if (cartModel.productQuantity > 0) {
-                                      await FirebaseFirestore.instance
-                                          .collection('cart')
-                                          .doc(user!.uid)
-                                          .collection('cartOrders')
-                                          .doc(cartModel.productID)
-                                          .update({
-                                        'productQuantity':
-                                        cartModel.productQuantity + 1,
-                                        'productTotalPrice':
-                                        (giaDouble)  +
-                                            (giaDouble) *
-                                                (cartModel.productQuantity)
-                                      });
-                                    }
-                                  },
-                                  child: CircleAvatar(
-                                    radius: 14.0,
-                                    backgroundColor: Colors.grey,
-                                    child: Text('+'),
-                                  ),
-                                )
                               ],
                             ),
                           ),
@@ -227,11 +183,11 @@ class _CartScreenState extends State<CartScreen> {
                   ),
                   child: TextButton(
                     child: Text(
-                      "Mua hàng",
+                      "Đặt Hàng",
                       style: TextStyle(color: Colors.redAccent),
                     ),
                     onPressed: () {
-                     Get.to(() => DatHang());
+                     showChiTietDeGiaoHang();
                     },
                   ),
                 ),
@@ -242,5 +198,116 @@ class _CartScreenState extends State<CartScreen> {
       ),
     );
   }
+  void showChiTietDeGiaoHang() {
+    Get.bottomSheet(
+      Container(
+        height: Get.height * 0.8,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(16.0),
+          ),
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 20.0, vertical: 20.0),
+                child: Container(
+                  height: 55.0,
+                  child: TextFormField(
+                    controller: nameController,
+                    decoration: InputDecoration(
+                      labelText: 'Name',
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 10.0,
+                      ),
+                      hintStyle: TextStyle(
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 20.0, vertical: 20.0),
+                child: Container(
+                  height: 55.0,
+                  child: TextFormField(
+                    controller: phoneController,
+                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.phone,
+                    decoration: InputDecoration(
+                      labelText: 'Phone',
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 10.0,
+                      ),
+                      hintStyle: TextStyle(
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 20.0, vertical: 20.0),
+                child: Container(
+                  height: 55.0,
+                  child: TextFormField(
+                    controller: addressController,
+                    decoration: InputDecoration(
+                      labelText: 'Address',
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 10.0,
+                      ),
+                      hintStyle: TextStyle(
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.orangeAccent,
+                  padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                ),
+                onPressed: () async {
+                  if (nameController.text != '' &&
+                      phoneController.text != '' &&
+                      addressController.text != '') {
+                    String name = nameController.text.trim();
+                    String phone = phoneController.text.trim();
+                    String address = addressController.text.trim();
+                    //place order serice
 
+                    placeOrder(
+                      context: context,
+                      customerName: name,
+                      customerPhone: phone,
+                      customerAddress: address,
+                    );
+                  } else {
+                    print("Fill The Details");
+                  }
+                },
+                child: Text(
+                  "Đặt hàng",
+                  style: TextStyle(color: Colors.white),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+      backgroundColor: Colors.transparent,
+      isDismissible: true,
+      enableDrag: true,
+      elevation: 6,
+    );
+  }
 }
+

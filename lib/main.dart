@@ -6,6 +6,7 @@ import 'package:projectandroid/pages/User.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:projectandroid/pages/aboutus.dart';
 import 'package:projectandroid/pages/search.dart';
+import 'package:projectandroid/widgets/allorder.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,7 +28,8 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/', page: () => LoginPage()),
         GetPage(name: '/homePage', page: () => HomePage()),
         GetPage(name: '/search', page: () => SearchProducts()),
-       // GetPage(name: '/itemPage', page: () => ItemPage()),
+        GetPage(name: '/allorders', page: () => AllOrdersScreen()),
+        // GetPage(name: '/itemPage', page: () => ItemPage()),
         GetPage(name: '/User', page: () => UserProfile()),
         GetPage(name: '/aboutus', page: () => AboutUs()),
       ],

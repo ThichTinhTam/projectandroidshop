@@ -83,6 +83,16 @@ class HomeBottomNavBar extends StatelessWidget {
           // ),
           InkWell(
             onTap: () {
+              Navigator.pushNamed(context, "allorders");
+            },
+            child: Icon(
+              Icons.local_shipping,
+              color: Colors.white,
+              size: 32,
+            ),
+          ),
+          InkWell(
+            onTap: () {
               Navigator.pushNamed(context, "User");
             },
             child: Icon(
