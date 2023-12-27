@@ -4,6 +4,7 @@ import 'package:projectandroid/pages/HomePage.dart';
 import 'package:projectandroid/pages/LoginPage.dart';
 import 'package:projectandroid/pages/User.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:projectandroid/pages/about.dart';
 import 'package:projectandroid/pages/aboutus.dart';
 import 'package:projectandroid/pages/search.dart';
 import 'package:projectandroid/widgets/allorder.dart';
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
         // GetPage(name: '/itemPage', page: () => ItemPage()),
         GetPage(name: '/User', page: () => UserProfile()),
         GetPage(name: '/aboutus', page: () => AboutUs()),
+        GetPage(name: '/about', page: () => About()),
       ],
       initialRoute: '/',
     );

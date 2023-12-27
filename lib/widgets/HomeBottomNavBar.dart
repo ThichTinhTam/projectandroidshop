@@ -92,33 +92,13 @@ class HomeBottomNavBar extends StatelessWidget {
             ),
           ),
           InkWell(
-            onTap: () {
-              Navigator.pushNamed(context, "User");
-            },
-            child: Icon(
-              Icons.person,
-              color: Colors.white,
-              size: 32,
-            ),
-          ),
-          InkWell(
-            onTap: () {
-              Navigator.pushNamed(context, "aboutus");
-            },
-            child: Icon(
-              Icons.info_rounded,
-              color: Colors.white,
-              size: 32,
-            ),
-          ),
-          InkWell(
-            onTap: () {Navigator.pushNamed(context, "/");},
+            onTap: () {Navigator.pushNamed(context, "/about");},
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Icon(
-                Icons.arrow_back,
+                Icons.format_align_justify_sharp,
                 size: 30,
-                color: Colors.redAccent,
+                color: Colors.white,
               ),
             ),
           ),
