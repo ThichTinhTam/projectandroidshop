@@ -29,30 +29,6 @@ class HomePage extends StatelessWidget {
                   size: 35,
                 ),
               ),
-              // GetBuilder<NotificationController>(
-              //   builder: (controller) {
-              //     return controller.hasUnreadNotification.value
-              //         ? Positioned(
-              //       top: 0,
-              //       right: 0,
-              //       child: Container(
-              //         padding: EdgeInsets.all(6),
-              //         decoration: BoxDecoration(
-              //           shape: BoxShape.circle,
-              //           color: Colors.red,
-              //         ),
-              //         child: Text(
-              //           '!',
-              //           style: TextStyle(
-              //             color: Colors.orangeAccent,
-              //             fontWeight: FontWeight.bold,
-              //           ),
-              //         ),
-              //       ),
-              //     )
-              //         : Container();
-              //   },
-              // ),
             ],
           ),
         ),

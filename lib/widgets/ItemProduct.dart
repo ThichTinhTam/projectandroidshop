@@ -215,7 +215,7 @@ class _ItemProductState extends State<ItemProduct> {
         'productTotalPrice': totalPrice
       });
       Get.snackbar(
-        "Thêm sản phẩm thành công",
+        "Thêm sản phẩm vào giỏ hàng thành công",
         "",
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.orange,
@@ -249,7 +249,7 @@ class _ItemProductState extends State<ItemProduct> {
 
       await documentReference.set(cartModel.toMap());
       Get.snackbar(
-        "Thêm sản phẩm thành công",
+        "Thêm sản phẩm vào giỏ hàng thành công",
         "",
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.orange,
