@@ -24,7 +24,7 @@ class SignInController extends GetxController {
         "Error",
         "$e",
         snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.orangeAccent,
         colorText: Colors.redAccent,
       );
     }
